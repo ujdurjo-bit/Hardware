@@ -3,12 +3,12 @@ package hr.java.web.Hardware.repository;
 
 import hr.java.web.Hardware.domain.Hardware;
 import hr.java.web.Hardware.domain.HardwareType;
-import hr.java.web.Hardware.service.HardwareService;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Repository
@@ -59,12 +59,43 @@ public class MockHardwareRepository implements HardwareRepository {
     }
 
     @Override
-    public void saveNewHardware(Hardware hardware) {
+    public Integer saveNewHardware(Hardware hardware) {
+        Integer generatedID = hardwareList.size() + 1;
+        hardware.setId(generatedID);
         hardwareList.add(hardware);
+        return generatedID;
+       }
+
+    public Optional<Hardware> updateHardware(Hardware hardwareToUpdate, Integer id) {
+        Optional<Hardware> storedHardwareOptional = hardwareList.stream().filter(a -> a.getId().equals(id)).findFirst();
+        if(storedHardwareOptional.isPresent()) {
+            Hardware storedHardware = storedHardwareOptional.get();
+            storedHardware.setName(hardwareToUpdate.getName());
+            storedHardware.setType(hardwareToUpdate.getType());
+            storedHardware.setPrice(hardwareToUpdate.getPrice());
+
+            return Optional.of(storedHardware);
+        }
+
+        return Optional.empty();
     }
 
+    @Override
+    public boolean hardwareByIdExists(Integer id) {
+//        return articleList.stream().filter(a -> a.getId().equals(id)).findFirst().isPresent();
+        return hardwareList.stream()
+                .anyMatch(a -> a.getId().equals(id));
+    }
 
+    @Override
+    public boolean deleteHardwareById(Integer id) {
+        return hardwareList.removeIf(article -> article.getId().equals(id));
+    }
 }
+
+
+
+
 
 
 
