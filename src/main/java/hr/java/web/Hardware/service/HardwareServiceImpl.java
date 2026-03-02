@@ -41,9 +41,9 @@ public class HardwareServiceImpl implements HardwareService {
         Integer latestId =
                 hardwareRepository.getAllHardware().stream()
                         .max((a1, a2) -> a1.getId().compareTo(a2.getId()))
-                        .get().getId();
+                        .get().getType().getId();
 
-        return new Hardware(latestId + 1, hardwareDTO.getHardwareName(),
+        return new Hardware((long) (latestId + 1), hardwareDTO.getHardwareName(),
                 hardwareDTO.getHardwareSerialNumber(), hardwareDTO.getHardwarePrice(), HardwareType.valueOf(hardwareDTO.getHardwareType()), hardwareDTO.getHardwareQuantity());
     }
 
