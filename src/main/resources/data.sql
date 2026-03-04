@@ -1,3 +1,5 @@
+DELETE FROM hardware;
+
 INSERT INTO hardware (name, snum, price, type, quantity)
 VALUES('Intel Core i7-13700K', 'CPU-001', 450.00, 'CPU', 15);
 

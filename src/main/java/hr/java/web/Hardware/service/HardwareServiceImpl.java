@@ -38,13 +38,15 @@ public class HardwareServiceImpl implements HardwareService {
     }
 
     private Hardware convertHardwareDtoToHardware(HardwareDTO hardwareDTO) {
-        Integer latestId =
-                hardwareRepository.getAllHardware().stream()
-                        .max((a1, a2) -> a1.getId().compareTo(a2.getId()))
-                        .get().getType().getId();
 
-        return new Hardware((long) (latestId + 1), hardwareDTO.getHardwareName(),
-                hardwareDTO.getHardwareSerialNumber(), hardwareDTO.getHardwarePrice(), HardwareType.valueOf(hardwareDTO.getHardwareType()), hardwareDTO.getHardwareQuantity());
+        return new Hardware(
+                null,
+                hardwareDTO.getHardwareName(),
+                hardwareDTO.getHardwareSerialNumber(),
+                hardwareDTO.getHardwarePrice(),
+                HardwareType.valueOf(hardwareDTO.getHardwareType()),
+                hardwareDTO.getHardwareQuantity()
+        );
     }
 
 

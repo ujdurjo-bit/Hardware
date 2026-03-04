@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS hardware;
+
 CREATE TABLE hardware
 (
     id IDENTITY PRIMARY KEY,
