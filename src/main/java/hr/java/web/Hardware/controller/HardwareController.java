@@ -34,10 +34,11 @@ public class HardwareController {
         return ResponseEntity.ok(hardwareService.getHardwareBySNum(Snum).stream().toList());
     }
 
+
     @PostMapping("/new")
     public ResponseEntity<?> saveNewAHardware(@Valid @RequestBody HardwareDTO hardwareDTO) {
-        Integer generatedId = hardwareService.saveNewHardware(hardwareDTO);
-        return ResponseEntity.ok(generatedId);
+        HardwareDTO savedHardwareDTO = hardwareService.saveNewHardware(hardwareDTO);
+        return ResponseEntity.ok(savedHardwareDTO);
 //        articleService.saveNewArticle(articleDTO);
 //        return new ResponseEntity<>(HttpStatus.CREATED);
     }

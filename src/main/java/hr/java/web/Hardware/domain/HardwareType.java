@@ -1,19 +1,24 @@
 package hr.java.web.Hardware.domain;
 
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Getter
+
+@Data
 @AllArgsConstructor
-public enum HardwareType {
-    CPU(1, "Processor", "Central Processing Unit"),
-    GPU(2, "Graphics Card", "Graphics Processing Unit"),
-    MBO(3, "Motherboard", "Mainboard"),
-    RAM(4, "RAM", "Random Access Memory"),
-    STORAGE(5, "Storage", "SSD or HDD"),
-    OTHER(6, "Other", "Other hardware components");
+@NoArgsConstructor
+@Entity
 
-    private final Integer id;
-    private final String name;
-    private final String description;
+public class HardwareType {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
+
+    private Integer id;
+    private String name;
+    private String description;
+
+
 }
