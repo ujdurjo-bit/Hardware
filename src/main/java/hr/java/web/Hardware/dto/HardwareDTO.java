@@ -29,3 +29,5 @@ public class HardwareDTO {
     @NotNull(message = "Quantity must not be null")
     private Integer hardwareQuantity;
 }
+
+

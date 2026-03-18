@@ -1,12 +1,8 @@
-/*Proširiti rješenje iz druge vježbe te implementirati sve preostale metode REST API sučelja kako je demonstrirano: GET, POST, PUT i DELETE.
-        Dodati sve potrebne ovisnosti u "pom.xml" kao što je "spring-boot-starter-validation" u "pom.xml" datoteku.
-        Proširiti HardwareDTO klasu s validacijskim anotacijama kako bi se validirala ispravnost poslanih podataka.
-        Napisati POST, PUT i DELETE metode koje će upravljati podacima entiteta.
-        Dodatne metode potrebno je implementirati po sva tri sloja aplikacije: "controller", "service" i "repository".*/
+
 
 package hr.java.web.Hardware.controller;
 
-
+import org.springframework.dao.DataIntegrityViolationException;
 import hr.java.web.Hardware.dto.HardwareDTO;
 import hr.java.web.Hardware.service.HardwareService;
 import jakarta.validation.Valid;
@@ -16,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/hardware")
@@ -45,13 +42,9 @@ public class HardwareController {
 
     @PutMapping("/hardware/{hardwareId}")
     public ResponseEntity<HardwareDTO> updateHardware(@Valid @RequestBody HardwareDTO hardwareDTO, @PathVariable Integer hardwareId) {
-        if(hardwareService.hardwareByIdExists(hardwareId)) {
-            hardwareService.updateHardware(hardwareDTO, hardwareId);
-            return ResponseEntity.ok(hardwareDTO);
-        }
-        else {
-            return ResponseEntity.notFound().build();
-        }
+        Optional<HardwareDTO> updated = hardwareService.updateHardware(hardwareDTO, hardwareId);
+        return updated.map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/hardware/{hardwareId}")
@@ -68,6 +61,16 @@ public class HardwareController {
         else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<?> handleConflict() {
+        return ResponseEntity.status(HttpStatus.CONFLICT).build();
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<?> handleNotFound(IllegalArgumentException e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
     }
 }
 
